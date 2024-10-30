@@ -1,0 +1,141 @@
+from tkinter import *
+import customtkinter
+import re
+from PIL import Image,ImageTk
+
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("green")
+root = customtkinter.CTk()
+root.title("IssueMailer")
+
+#geometry will decide the dimensions of the main widget
+root.geometry("900x600")
+# min/max size will determine min or max size of the widget
+root.minsize(900, 600)
+root.maxsize(900, 600)
+
+
+image = Image.open("welcome promt (1).png")
+width, height = 1130, 750 
+resized_image = image.resize((width, height), Image.LANCZOS)
+photo = ImageTk.PhotoImage(resized_image)
+label = Label(root, image=photo)
+label.pack()
+
+
+name_var = StringVar()
+enroll_var = StringVar()
+room_var = StringVar()
+pass_var= StringVar()
+
+
+def next_page():
+    # Hide the main root window
+    root.withdraw()
+
+    # Create a new window for the next page
+    root2 = customtkinter.CTk()
+    root2.title("IssueMailer")
+    root2.geometry("900 x 600")
+    root2.minsize(900, 600)
+    root2.maxsize(900, 600)
+    # For image background
+    image = Image.open("second.png") 
+    bg = customtkinter.CTkImage(image, size=(900, 600))  
+    bg_label = customtkinter.CTkLabel(root2, image=bg)
+    bg_label.pack()
+    # Display a simple message on the new page
+    label = customtkinter.CTkLabel(root2, text="Please select the fields that apply:", font=('Times New Roman', 18))
+    label.grid(row=0, column=0, columnspan=2, pady=20)
+
+    # Buttons in grid layout
+    clean_button = customtkinter.CTkButton(root2, text="Room Cleaning", font=("Times New Roman", 18), fg_color="purple")
+    clean_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+
+    electrical_button = customtkinter.CTkButton(root2, text="Electrical Issue", font=("Times New Roman", 18), fg_color="purple")
+    electrical_button.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+
+    custom_button = customtkinter.CTkButton(root2, text="Custom Maintenance Issue", font=("Times New Roman", 18), fg_color="purple")
+    custom_button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
+
+    wifi_button = customtkinter.CTkButton(root2, text="Slow WiFi", font=("Times New Roman", 18), fg_color="purple")
+    wifi_button.grid(row=4, column=0, padx=10, pady=10, sticky="ew")
+
+    login_button = customtkinter.CTkButton(root2, text="Logging In Issue", font=("Times New Roman", 18), fg_color="purple")
+    login_button.grid(row=5, column=0, padx=10, pady=10, sticky="ew")
+
+    IT_button = customtkinter.CTkButton(root2, text="Custom IT Issue", font=("Times New Roman", 18), fg_color="purple")
+    IT_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+
+    mess_button = customtkinter.CTkButton(root2, text="Custom Mess Issue", font=("Times New Roman", 18), fg_color="purple")
+    mess_button.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
+
+    admin_button = customtkinter.CTkButton(root2, text="Custom Admin Issue", font=("Times New Roman", 18), fg_color="purple")
+    admin_button.grid(row=3, column=1, padx=10, pady=10, sticky="ew")
+
+    finance_button = customtkinter.CTkButton(root2, text="Custom Finance Issue", font=("Times New Roman", 18), fg_color="purple")
+    finance_button.grid(row=4, column=1, padx=10, pady=10, sticky="ew")
+    student_button = customtkinter.CTkButton(root2, text="Custom Student Issue", font=("Times New Roman", 18), fg_color="purple")
+    student_button.grid(row=5, column=1, padx=10, pady=10, sticky="ew")
+
+    # Add a close button to exit
+    close_button = customtkinter.CTkButton(root2, text="Close", command=root2.destroy)
+    close_button.grid(row=6, column=0, columnspan=2, pady=20, sticky="ew")
+
+    # Configure grid to expand with window resizing
+    root2.grid_columnconfigure((0, 1), weight=1)
+    root2.grid_rowconfigure((1, 2, 3, 4, 5, 6), weight=1)
+
+    root2.mainloop()
+
+
+def submit():
+    name = name_var.get()
+    enrollment = enroll_var.get()
+    room = room_var.get()
+    password = pass_var.get()
+
+    # Regex patterns
+    name_pattern = r'^[A-Za-z ]+$'           
+    enroll_pattern = r'^[A-Za-z0-9]+$'       
+    room_pattern = r'^[CDcd][A-Za-z0-9-]+$'     
+    password_pattern = r'^[a-zA-Z0-9*&^%$#@!-]+$'
+
+    # Validation checks
+    if name=="" or enrollment=="" or room=="" or password=="":
+        result_label.configure(text="Please fill all entries.", text_color="red")
+    elif not re.match(name_pattern, name):
+        result_label.configure(text="Name should only contain alphabets and spaces.", text_color="red")
+    elif not re.match(enroll_pattern, enrollment):
+        result_label.configure(text="Enrollment should contain letters and numbers only.", text_color="red")
+    elif not re.match(room_pattern, room):
+        result_label.configure(text="Room number must start with 'C' or 'D'\n and contain letters/numbers.", text_color="red")
+    elif not re.match(password_pattern, password):
+        result_label.configure(text="please fill all entries", text_color="red")
+    else:
+        next_page() 
+
+    # name_var.set("")
+    # enroll_var.set("")
+    # room_var.set("")
+    # pass_var.set()
+
+myEntry = customtkinter.CTkEntry(root, placeholder_text="Enter Your Name", textvariable=name_var, height=35, width=200, font=('Times New Roman', 18),fg_color="skyblue")
+myEntry.place(x=610,y=175)
+
+myEntry2 = customtkinter.CTkEntry(root, placeholder_text="Enter Your Enrollment Number", textvariable=enroll_var, height=35, width=200, font=('Times New Roman', 18),fg_color="skyblue")
+myEntry2.place(x=610,y=245)
+
+myEntry3 = customtkinter.CTkEntry(root, placeholder_text="Enter Your Room Number", textvariable=room_var, height=35, width=200, font=('Times New Roman', 18),fg_color="skyblue")
+myEntry3.place(x=610,y=310)
+
+myEntry4 = customtkinter.CTkEntry(root, placeholder_text="Enter Your Password", textvariable=pass_var, height=35, width=200, font=('Times New Roman', 18),fg_color="skyblue")
+myEntry4.place(x=610,y=387)
+
+myButton = customtkinter.CTkButton(root, text="Submit", command=submit, fg_color="skyblue", )
+myButton.place(x=635,y=480)
+
+result_label = customtkinter.CTkLabel(root, text="", font=('Times New Roman', 15),bg_color="#1b1c4a")
+result_label.place(x=565,y=440)
+
+root.mainloop()
